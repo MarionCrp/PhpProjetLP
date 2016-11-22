@@ -13,7 +13,7 @@ print "<p>\n";
 print "<a href=\"".$data->prevURL."\">Prev</a> ";
 print "<a href=\"".$data->nextURL."\">Next</a>";
 print "</p>\n";
-print "<img src=\"".$data->imageURL."\"width\"".$data->size."\">\n";
+print "<img src=\"".$data->imageURL."\"width=\"".$data->size."\">\n";
 print "</a>\n";
 
 ?>
