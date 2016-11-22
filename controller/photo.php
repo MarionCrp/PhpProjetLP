@@ -64,7 +64,7 @@ class photo{
         $data = new data();
         $newImage = $this->imgDAO->getImage($imageId);
         $data->imageURL = $newImage->getURL();
-        $data->size = 480;
+        $data->size = $size;
         $data->imageId = $imageId;
         $prevImageId = $imageId - 1;
         $nextImageId = $imageId + 1;
@@ -114,7 +114,6 @@ class photo{
 
     public function random(){
         global $data,$imageId, $size,$zoom;
-        //$data = new data();
         $this->getParams();
         $randomImage = $this->imgDAO->getRandomImage();
         $imageId = $randomImage->getId();
@@ -123,12 +122,20 @@ class photo{
     }
 
     public function zoomPlus(){
-        $data = new data();
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+        $zoom = 1.25;
+        $size = $size*$zoom;
+        $this->setContentView();
         $this->setMenuView();
     }
 
     public function zoomMoins(){
-        $data = new data();
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+        $zoom = 0.75;
+        $size = $size*$zoom;
+        $this->setContentView();
         $this->setMenuView();
     }
 }
