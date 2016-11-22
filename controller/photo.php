@@ -65,8 +65,11 @@ class photo{
         $newImage = $this->imgDAO->getImage($imageId);
         $data->imageURL = $newImage->getURL();
         $data->size = 480;
-        $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$imageId."&size=".$size;
-        $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$imageId."&size=".$size;
+        $data->imageId = $imageId;
+        $prevImageId = $imageId - 1;
+        $nextImageId = $imageId + 1;
+        $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$prevImageId."&size=".$size;
+        $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$nextImageId."&size=".$size;
     }
 
     public function first()
@@ -86,10 +89,10 @@ class photo{
         $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
         $nextImage = $this->imgDAO->getNextImage($currentImage);
-        $imageId = $nextImage->getId();
+        $nextImageId = $nextImage->getId();
         $max = $this->imgDAO->size();
-        if($imageId > $max){
-            $imageId = $max;
+        if($nextImageId > $max){
+            $nextImageId = $max;
         }
         $this->setContentView();
         $this->setMenuView();
@@ -101,9 +104,9 @@ class photo{
         $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
         $prevImage = $this->imgDAO->getPrevImage($currentImage);
-        $imageId = $prevImage->getId();
-        if($imageId<=0){
-            $imageId=1;
+        $prevImageId = $prevImage->getId();
+        if($prevImageId<=0){
+            $prevImageId=1;
         }
         $this->setContentView();
         $this->setMenuView();
