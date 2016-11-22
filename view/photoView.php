@@ -15,5 +15,6 @@ print "<a href=\"".$data->nextURL."\">Next</a>";
 print "</p>\n";
 print "<img src=\"".$data->imageURL."\"width=\"".$data->size."\">\n";
 print "</a>\n";
-
+print "<p>".$data->imageCategory."</p>";
+print "<p>".$data->imageCommentary."</p>";
 ?>

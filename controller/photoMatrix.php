@@ -93,8 +93,6 @@ class photoMatrix
         $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $nbImg;
 
         $data->imgLst = $imgMatrixURL;
-
-
     }
 
     private function init()

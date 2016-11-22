@@ -70,6 +70,8 @@ class photo{
         $nextImageId = $imageId + 1;
         $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$prevImageId."&size=".$size;
         $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$nextImageId."&size=".$size;
+        $data->imageCategory = $newImage->getCategory();
+        $data->imageCommentary = $newImage->getCommentary();
     }
 
     public function first()
