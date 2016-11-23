@@ -127,6 +127,30 @@
 			}
 			return $res;
 		}
+
+		function getCategory($imgId){
+			//return $this->dbh->query('SELECT category FROM image WHERE id='.$imgId,PDO::FETCH_ASSOC);
+			$rqt = $this->dbh->query('SELECT category FROM image WHERE id='.$imgId);
+			$category = $rqt->fetchColumn();
+			return $category;
+		}
+
+		# Change la catégorie de l'image
+		function updateImageCategory($imgId, $newCategory){
+			$rqt = $this->dbh->prepare('UPDATE image SET category = :category WHERE id = :id');
+			$rqt->bindValue(':id',$imgId);
+			$rqt->bindValue(':category',$newCategory);
+			$rqt->execute();
+		}
+
+		# Change le commentaire de l'image
+		function updateImageCommentary($imgId, $newComment){
+			$rqt = $this->dbh->prepare('UPDATE image SET commentary :commentary WHERE id = :id');
+			$rqt->bindValue(':id',$imgId);
+			$rqt->bindValue(':commentary',$newComment);
+			$rqt->execute();
+			/*echo("cat update");*/
+		}
 	}
 
 	# Test unitaire

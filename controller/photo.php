@@ -68,6 +68,8 @@ class photo
 
         if ($_GET['action'] == 'changeCategory') {
             $data->content = "view/changeCategoryView.php";
+            $data->actualCategory = $this->imgDAO->getCategory($imageId);
+            $data->imageId = $imageId;
         }
         elseif ($_GET['action'] == 'changeCommentary') {
             $data->content = "view/changeCommentaryView.php";
@@ -80,8 +82,8 @@ class photo
             $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
             $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
 
-            $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory";
-            $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary";
+            $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory&imageId=" . $imageId ;
+            $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary&imageId=" . $imageId;
 
             $data->imageCategory = $newImage->getCategory();
             $data->imageCommentary = $newImage->getCommentary();
@@ -160,6 +162,7 @@ class photo
         $this->setMenuView();
     }
 
+    /* partie pour changer catégorie */
     public function changeCategory()
     {
         global $data, $imageId, $size, $zoom;
@@ -169,10 +172,30 @@ class photo
         $this->setMenuView();
     }
 
+    public function validateChangeCategory(){
+        global $data, $imageId, $size, $zoom;
+        if(isset($_POST["category"])){
+            $this->getParams();
+            $this->imgDAO->updateImageCategory($imageId, $_POST["category"]);
+            $this->setContentView();
+            $this->setMenuView();
+        }
+    }
+
+    /* partie pour changer commentaire */
     public function changeCommentary(){
         global $data,$imageId,$size,$zoom;
         $this->getParams();
 
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function validateChangeCommentary(){
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+
+        $this->imgDAO->updateImageCommentary($imageId, "changed comment");
         $this->setContentView();
         $this->setMenuView();
     }

@@ -37,11 +37,14 @@
         </datalist>
 
         <h1>Chamgement de catégorie de l'image</h1>
-        <form method="post" action="">
-            <p>Catégorie actuelle: </p>
-            <br/>
-            <label class="labelClass">Catégorie: <input type="text" name="category" list="category" required/></label>
-            <br/>
+        <form method="post" action="index.php?controller=photo&action=validateChangeCategory">
+            <p>id: <?= $data->imageId ?></p>
+            <p>Catégorie actuelle: <?= $data->actualCategory ?></p>
+            <select name="category">
+                <option value="Tourist">Tourist</option>
+                <option>Beltaine</option>
+                <option>Attractions</option>
+            </select>
             <input type="submit" name="envoyer" value="Envoyer"/>
         </form>
     </div>
