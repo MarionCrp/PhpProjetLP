@@ -99,12 +99,13 @@
 		# Retourne la nouvelle image
 		function jumpToImage(image $img,$nb) {
 			$id=$img->getId();
-            if($id+$nb > 0){
-                $newImg=$this->getImage($id+$nb);
-                return $newImg;
-            }else{
-                return $img;
-            }
+			if(($id+$nb) < 1 || ($id+$nb) > $this->size()){
+				 return $img;
+			} else {
+				$max_id = $id+$nb;
+				$newImg= $this->getImage($max_id);
+				return $newImg;
+			}
 		}
 
 		# Retourne la liste des images consécutives à partir d'une image
@@ -115,8 +116,12 @@
 				trigger_error("Erreur dans ImageDAO.getImageList: nombre d'images nul");
 			}
 			$id = $img->getId();
-			$max = $id+$nb;
-			while ($id < $this->size() && $id < $max) {
+			if(($id+$nb) < $this->size()){
+				$max = $id + $nb;
+			} else {
+				$max = $this->size();
+			}
+			while ($id < $max) {
 				$res[] = $this->getImage($id);
 				$id++;
 			}
