@@ -9,75 +9,83 @@ require_once("model/data.php");
 require_once("model/image.php");
 require_once("model/imageDAO.php");
 
-class photo{
+class photo
+{
 
     private $data;
     private $imgDAO;
     private $currentImgId;
 
     # Chemin URL où se trouvent les images
-    const urlPath="http://localhost/image/image/model/IMG/";
+    const urlPath = "http://localhost/image/image/model/IMG/";
 
     public function __construct()
     {
         $this->imgDAO = new imageDAO();
     }
 
-    protected function getParams(){
-        global $imageId,$size,$zoom;
+    protected function getParams()
+    {
+        global $imageId, $size, $zoom;
 
-        if(isset($_GET["imageId"])){
+        if (isset($_GET["imageId"])) {
             $imageId = $_GET["imageId"];
-        }else{
+        } else {
             $imageId = 1;
         }
 
-        if(isset($_GET['size'])){
+        if (isset($_GET['size'])) {
             $size = $_GET["size"];
-        }else{
-            $size=480;
+        } else {
+            $size = 480;
         }
 
-        if(isset($_GET['zoom'])){
+        if (isset($_GET['zoom'])) {
             $zoom = $_GET["zoom"];
-        }else{
-            $zoom=1.0;
+        } else {
+            $zoom = 1.0;
         }
     }
 
-    private function setMenuView(){
-        global $data,$imageId,$size,$zoom;
+    private function setMenuView()
+    {
+        global $data, $imageId, $size, $zoom;
         //charge la vue
         $data->menu['Home'] = "index.php";
         $data->menu['A propos'] = "index.php?controller=home&action=aPropos";
-        $data->menu['First'] = "index.php?controller=photo&action=first&imageId=1&size=".$size."&zoom=".$zoom;
-        $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=".$imageId."&size=".$size."&zoom=".$zoom;
-        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=".$imageId."&size=".$size."&zoom=".$zoom."&nb=2";
-        $data->menu['Zoom +'] = "index.php?controller=photo&action=zoomPlus&imageId=".$imageId."&size=".$size."&zoom=1.25";
-        $data->menu['Zoom -'] = "index.php?controller=photo&action=zoomMoins&imageId=".$imageId."&size=".$size."&zoom=0.8";
-        $data->content = "view/photoView.php";
+        $data->menu['First'] = "index.php?controller=photo&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom;
+        $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom;
+        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nb=2";
+        $data->menu['Zoom +'] = "index.php?controller=photo&action=zoomPlus&imageId=" . $imageId . "&size=" . $size . "&zoom=1.25";
+        $data->menu['Zoom -'] = "index.php?controller=photo&action=zoomMoins&imageId=" . $imageId . "&size=" . $size . "&zoom=0.8";
         require_once("view/mainView.php");
     }
 
-    private function setContentView(){
-        global $data,$imageId,$size,$zoom,$img;
+    private function setContentView()
+    {
+        global $data, $imageId, $size, $zoom, $img;
         $data = new data();
-        $newImage = $this->imgDAO->getImage($imageId);
-        $data->imageURL = $newImage->getURL();
-        $data->size = $size;
-        $data->imageId = $imageId;
 
-        $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$imageId."&size=".$size;
-        $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$imageId."&size=".$size;
+        if ($_GET['action'] == 'changeCategory') {
+            $data->content = "view/changeCategoryView.php";
+        } else {
+          $newImage = $this->imgDAO->getImage($imageId);
+          $data->imageURL = $newImage->getURL();
+          $data->size = $size;
+          $data->imageId = $imageId;
 
-        $data->imageCategory = $newImage->getCategory();
-        $data->imageCommentary = $newImage->getCommentary();
+          $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$imageId."&size=".$size;
+          $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$imageId."&size=".$size;
+
+          $data->imageCategory = $newImage->getCategory();
+          $data->imageCommentary = $newImage->getCommentary();
+        }
     }
 
     public function first()
     {
-        global $data,$imageId,$size,$zoom;
-       // $data = new data();
+        global $data, $imageId, $size, $zoom;
+        // $data = new data();
         $this->getParams();
         $image = $this->imgDAO->getFirstImage();
         $imageId = $image->getId();
@@ -85,8 +93,9 @@ class photo{
         $this->setMenuView();
     }
 
-    public function nextPicture(){
-        global $data,$imageId,$size,$zoom;
+    public function nextPicture()
+    {
+        global $data, $imageId, $size, $zoom;
         //$data = new data();
         $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
@@ -107,8 +116,9 @@ class photo{
         $this->setMenuView();
     }
 
-    public function random(){
-        global $data,$imageId, $size,$zoom;
+    public function random()
+    {
+        global $data, $imageId, $size, $zoom;
         $this->getParams();
         $randomImage = $this->imgDAO->getRandomImage();
         $imageId = $randomImage->getId();
@@ -116,20 +126,31 @@ class photo{
         $this->setMenuView();
     }
 
-    public function zoomPlus(){
+    public function zoomPlus()
+    {
         global $data, $imageId, $size, $zoom;
         $this->getParams();
         $zoom = 1.25;
-        $size = $size*$zoom;
+        $size = $size * $zoom;
         $this->setContentView();
         $this->setMenuView();
     }
 
-    public function zoomMoins(){
+    public function zoomMoins()
+    {
         global $data, $imageId, $size, $zoom;
         $this->getParams();
         $zoom = 0.75;
-        $size = $size*$zoom;
+        $size = $size * $zoom;
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function changeCategory()
+    {
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+
         $this->setContentView();
         $this->setMenuView();
     }
