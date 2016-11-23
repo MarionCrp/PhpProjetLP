@@ -116,12 +116,18 @@ class photo
     {
         global $data, $imageId, $size, $zoom;
         $this->getParams();
-        $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
         $prevImage = $this->imgDAO->getPrevImage($currentImage);
         $imageId = $prevImage->getId();
         $this->setContentView();
         $this->setMenuView();
+    }
+
+    public function show() {
+      global $data, $imageId, $size, $zoom;
+      $this->getParams();
+      $this->setContentView();
+      $this->setMenuView();
     }
 
     public function random()

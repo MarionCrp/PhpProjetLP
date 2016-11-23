@@ -164,7 +164,7 @@ class photoMatrix
           # Ajoute à imgMatrixURL
           #  0 : l'URL de l'image
           #  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
-          $imgMatrixURL[] = array($i->getURL(), "index.php?controller=photo&action=first&imageId=" . $iId . "&size=" . $size);
+          $imgMatrixURL[] = array($i->getURL(), "index.php?controller=photo&action=show&imageId=" . $iId . "&size=600");
       }
     }
 }
