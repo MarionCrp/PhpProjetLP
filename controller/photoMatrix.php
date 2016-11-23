@@ -125,37 +125,35 @@ class photoMatrix
 
     public function nextPicture()
     {
-        //TODO: next ne fonctionne pas encore
-        global $data, $imageId, $size, $zoom, $nbImg, $imgLst;
+        global $data, $imageId, $size, $zoom, $nbImg, $imgLst, $img;
         $this->getParams();
-        $this->getPictureList();
         $currentImage = $this->imgDAO->getImage($imageId); //récupère l'image courante (la première du  groupe)
-
         // pre-calcul de la page d'images suivante
         $newNextFirstImage = $this->imgDAO->jumpToImage($currentImage, $nbImg); //récupère la première precédente image (première du précédent groupe)
         $imageId = $newNextFirstImage->getId(); //ID de la précédente première image
+        $img = $this->imgDAO->getImage($imageId);
+        $this->getPictureList();
         $this->setContentView();
         $this->setMenuView();
     }
 
     public function prevPicture()
     {
-        //TODO: prev ne fonctionne pas encore
-        global $data, $imageId, $size, $zoom, $nbImg, $imgLst;
+        global $data, $imageId, $size, $zoom, $nbImg, $imgLst, $img;
         $this->getParams();
-        $this->getPictureList();
         $currentImage = $this->imgDAO->getImage($imageId); //récupère l'image courante (la première du  groupe)
 
         // pre-calcul de la page d'images précédente
         $newPrevFirstImage = $this->imgDAO->jumpToImage($currentImage, -$nbImg); //récupère la première precédente image (première du précédent groupe)
         $imageId = $newPrevFirstImage->getId(); //ID de la précédente première image
+        $img = $this->imgDAO->getImage($imageId);
+        $this->getPictureList();
         $this->setContentView();
         $this->setMenuView();
     }
 
     public function getPictureList(){
       global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
-
       # Calcul la liste des images à afficher
       $imgLst = $this->imgDAO->getImageList($img, $nbImg);
       # Transforme cette liste en liste de couples (tableau a deux valeurs)
