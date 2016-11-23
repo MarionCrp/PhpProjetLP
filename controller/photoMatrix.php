@@ -22,7 +22,7 @@ class photoMatrix
 
     protected function getParams()
     {
-        global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL;
+        global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
 
         if (isset($_GET["imageId"])) {
             $imageId = $_GET["imageId"];
@@ -48,20 +48,6 @@ class photoMatrix
             # sinon place une valeur de taille par défaut
             $size = 480;
         }
-
-        # Calcul la liste des images à afficher
-        $imgLst = $this->imgDAO->getImageList($img, $nbImg);
-
-        # Transforme cette liste en liste de couples (tableau a deux valeurs)
-        # contenant l'URL de l'image et l'URL de l'action sur cette image
-        foreach ($imgLst as $i) {
-            # l'identifiant de cette image $i
-            $iId = $i->getId();
-            # Ajoute à imgMatrixURL
-            #  0 : l'URL de l'image
-            #  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
-            $imgMatrixURL[] = array($i->getURL(), "index.php?controller=photo&action=first&imageId=" . $iId . "&size=" . $size);
-        }
     }
 
     private function setMenuView()
@@ -72,8 +58,8 @@ class photoMatrix
         $data->menu['A propos'] = "index.php?controller=home&action=aPropos";
         $data->menu['First'] = "index.php?controller=photoMatrix&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom;
         $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom;
-        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg*2;
-        $data->menu['Less'] = "index.php?controller=photoMatrix&action=less&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg/2;
+        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg;
+        $data->menu['Less'] = "index.php?controller=photoMatrix&action=less&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg;
         $data->content = "view/photoMatrixView.php";
         require_once("view/mainView.php");
     }
@@ -89,8 +75,9 @@ class photoMatrix
         $size = 480 / sqrt(count($imgMatrixURL));
         $data->size = $size;
         $data->nbImg =  $nbImg;
-        $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $data->nbImg;
-        $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $data->nbImg;
+        $data->imgId = $imageId;
+        $data->prevURL = "index.php?controller=photoMatrix&action=prevPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $data->nbImg;
+        $data->nextURL = "index.php?controller=photoMatrix&action=nextPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $data->nbImg;
 
         $data->imgLst = $imgMatrixURL;
     }
@@ -109,6 +96,8 @@ class photoMatrix
     {
         global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL;
         $this->getParams();
+        $nbImg = $nbImg*2;
+        $this->getPictureList();
         $this->setContentView();
         $this->setMenuView();
     }
@@ -117,6 +106,8 @@ class photoMatrix
     {
       global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL;
       $this->getParams();
+      if($nbImg >= 2) $nbImg = $nbImg/2;
+      $this->getPictureList();
       $this->setContentView();
       $this->setMenuView();
     }
@@ -137,22 +128,45 @@ class photoMatrix
         //TODO: next ne fonctionne pas encore
         global $data, $imageId, $size, $zoom, $nbImg, $imgLst;
         $this->getParams();
+        $this->getPictureList();
         $currentImage = $this->imgDAO->getImage($imageId); //récupère l'image courante (la première du  groupe)
 
         // pre-calcul de la page d'images suivante
         $newNextFirstImage = $this->imgDAO->jumpToImage($currentImage, $nbImg); //récupère la première precédente image (première du précédent groupe)
         $imageId = $newNextFirstImage->getId(); //ID de la précédente première image
+        $this->setContentView();
+        $this->setMenuView();
     }
 
     public function prevPicture()
     {
         //TODO: prev ne fonctionne pas encore
         global $data, $imageId, $size, $zoom, $nbImg, $imgLst;
-
+        $this->getParams();
+        $this->getPictureList();
         $currentImage = $this->imgDAO->getImage($imageId); //récupère l'image courante (la première du  groupe)
 
         // pre-calcul de la page d'images précédente
         $newPrevFirstImage = $this->imgDAO->jumpToImage($currentImage, -$nbImg); //récupère la première precédente image (première du précédent groupe)
         $imageId = $newPrevFirstImage->getId(); //ID de la précédente première image
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function getPictureList(){
+      global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
+
+      # Calcul la liste des images à afficher
+      $imgLst = $this->imgDAO->getImageList($img, $nbImg);
+      # Transforme cette liste en liste de couples (tableau a deux valeurs)
+      # contenant l'URL de l'image et l'URL de l'action sur cette image
+      foreach ($imgLst as $i) {
+          # l'identifiant de cette image $i
+          $iId = $i->getId();
+          # Ajoute à imgMatrixURL
+          #  0 : l'URL de l'image
+          #  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
+          $imgMatrixURL[] = array($i->getURL(), "index.php?controller=photo&action=first&imageId=" . $iId . "&size=" . $size);
+      }
     }
 }
