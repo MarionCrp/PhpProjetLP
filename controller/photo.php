@@ -68,7 +68,10 @@ class photo
 
         if ($_GET['action'] == 'changeCategory') {
             $data->content = "view/changeCategoryView.php";
-        } else {
+        }
+        elseif ($_GET['action'] == 'changeCommentary') {
+            $data->content = "view/changeCommentaryView.php";
+        }else {
             $newImage = $this->imgDAO->getImage($imageId);
             $data->imageURL = $newImage->getURL();
             $data->size = $size;
@@ -76,6 +79,9 @@ class photo
 
             $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
             $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
+
+            $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory";
+            $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary";
 
             $data->imageCategory = $newImage->getCategory();
             $data->imageCommentary = $newImage->getCommentary();
@@ -151,6 +157,14 @@ class photo
     public function changeCategory()
     {
         global $data, $imageId, $size, $zoom;
+        $this->getParams();
+
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function changeCommentary(){
+        global $data,$imageId,$size,$zoom;
         $this->getParams();
 
         $this->setContentView();
