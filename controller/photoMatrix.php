@@ -56,7 +56,7 @@ class photoMatrix
         //charge la vue
         $data->menu['Home'] = "index.php";
         $data->menu['A propos'] = "index.php?controller=home&action=aPropos";
-        $data->menu['First'] = "index.php?controller=photoMatrix&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom;
+        $data->menu['First'] = "index.php?controller=photoMatrix&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom. "&nbImg=".$nbImg;
         $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom;
         $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg;
         $data->menu['Less'] = "index.php?controller=photoMatrix&action=less&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg;
@@ -113,7 +113,6 @@ class photoMatrix
 
     public function first()
     {
-        //TODO: first ne fonctionne pas -> modifier code pour MATRIX
         global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
         $this->getParams();
         $image = $this->imgDAO->getFirstImage();
