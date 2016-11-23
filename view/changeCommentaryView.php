@@ -8,13 +8,13 @@
 ?>
 <html>
 <div>
-    <h1>Chamgement du commentaire de l'image</h1>;
-    <form method="post" action="">
-        <p>Commentaire actuel: </p>
+    <h1>Changement du commentaire de l'image</h1>
+    <form method="post" action="index.php?controller=photo&action=validateChangeCommentary&imageId=<?= $data->imageId?>">
+        <p>Commentaire actuel: <?= $data->actualComment?></p>
         <br/>
-        <label class="labelClass">Commentaire:<input type="text" name="commentary" required/></label>
+        <label class="labelClass">Nouveau commentaire: <input type="text" name="commentary" required/></label>
         <br/>
-        <input type="submit" name="envoyer" value="Envoyer"/>
+        <input type="submit" name="envoyer" value="Sauvegarder"/>
     </form>
 </div>
 </html>

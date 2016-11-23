@@ -73,6 +73,8 @@ class photo
         }
         elseif ($_GET['action'] == 'changeCommentary') {
             $data->content = "view/changeCommentaryView.php";
+            $data->actualComment = $this->imgDAO->getCommentary($imageId);
+            $data->imageId = $imageId;
         }else {
             $newImage = $this->imgDAO->getImage($imageId);
             $data->imageURL = $newImage->getURL();
@@ -193,10 +195,11 @@ class photo
 
     public function validateChangeCommentary(){
         global $data, $imageId, $size, $zoom;
-        $this->getParams();
-
-        $this->imgDAO->updateImageCommentary($imageId, "changed comment");
-        $this->setContentView();
-        $this->setMenuView();
+        if(isset($_POST["commentary"])){
+            $this->getParams();
+            $this->imgDAO->updateImageCommentary($imageId,$_POST["commentary"]);
+            $this->setContentView();
+            $this->setMenuView();
+        }
     }
 }
