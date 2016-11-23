@@ -86,7 +86,6 @@ class photoMatrix
     {
         //TODO: init ne fonctionne pas encore -> modifier code
         global $data, $imageId, $size, $zoom, $imgMatrixURL;
-
         $this->getParams();
         $this->setMenuView();
         $this->setContentView();
@@ -115,10 +114,11 @@ class photoMatrix
     public function first()
     {
         //TODO: first ne fonctionne pas -> modifier code pour MATRIX
-        global $data, $imageId, $size, $zoom;
+        global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
         $this->getParams();
         $image = $this->imgDAO->getFirstImage();
         $imageId = $image->getId();
+        $this->getPictureList();
         $this->setContentView();
         $this->setMenuView();
     }
