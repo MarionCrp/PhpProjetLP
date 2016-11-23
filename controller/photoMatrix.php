@@ -72,8 +72,8 @@ class photoMatrix
         $data->menu['A propos'] = "index.php?controller=home&action=aPropos";
         $data->menu['First'] = "index.php?controller=photoMatrix&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom;
         $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom;
-        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg;
-        $data->menu['Less'] = "index.php?controller=photoMatrix&action=less&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg;
+        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg*2;
+        $data->menu['Less'] = "index.php?controller=photoMatrix&action=less&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=" . $nbImg/2;
         $data->content = "view/photoMatrixView.php";
         require_once("view/mainView.php");
     }
@@ -88,9 +88,9 @@ class photoMatrix
         # Adapte la taille des images au nombre d'images présentes
         $size = 480 / sqrt(count($imgMatrixURL));
         $data->size = $size;
-
-        $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $nbImg;
-        $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $nbImg;
+        $data->nbImg =  $nbImg;
+        $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $data->nbImg;
+        $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size . "&nbImg=" . $data->nbImg;
 
         $data->imgLst = $imgMatrixURL;
 
@@ -109,28 +109,24 @@ class photoMatrix
 
     public function more()
     {
-        //TODO: more ne fonctionne pas -> modifier code
         global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL;
         $this->getParams();
-        $nbImg = $nbImg * 2;
         $this->setContentView();
         $this->setMenuView();
     }
 
     public function less()
     {
-        //TODO: less ne fonctionne pas -> modifier code
-        global $data, $imageId, $size, $zoom,$nbImg;
-        $this->getParams();
-        $newNbImg = $nbImg / 2;
-        $nbImg = $newNbImg;
+      global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL;
+      $this->getParams();
+      $this->setContentView();
+      $this->setMenuView();
     }
 
     public function first()
     {
         //TODO: first ne fonctionne pas -> modifier code pour MATRIX
         global $data, $imageId, $size, $zoom;
-        // $data = new data();
         $this->getParams();
         $image = $this->imgDAO->getFirstImage();
         $imageId = $image->getId();
