@@ -128,6 +128,7 @@
 			return $res;
 		}
 
+		# Retourne la catégorie pour un imgId donné
 		function getCategory($imgId){
 			//return $this->dbh->query('SELECT category FROM image WHERE id='.$imgId,PDO::FETCH_ASSOC);
 			$rqt = $this->dbh->query('SELECT category FROM image WHERE id='.$imgId);
@@ -143,9 +144,16 @@
 			$rqt->execute();
 		}
 
+		# Retounrne le commentaire pour un imgId donné
+		function getCommentary($imgId){
+				$rqt = $this->dbh->query('SELECT commentary FROM image WHERE id='.$imgId);
+				$commentary = $rqt->fetchColumn();
+				return $commentary;
+		}
+
 		# Change le commentaire de l'image
 		function updateImageCommentary($imgId, $newComment){
-			$rqt = $this->dbh->prepare('UPDATE image SET commentary :commentary WHERE id = :id');
+			$rqt = $this->dbh->prepare('UPDATE image SET commentary = :commentary WHERE id = :id');
 			$rqt->bindValue(':id',$imgId);
 			$rqt->bindValue(':commentary',$newComment);
 			$rqt->execute();
