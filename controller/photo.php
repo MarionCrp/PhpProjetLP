@@ -55,7 +55,7 @@ class photo
         $data->menu['A propos'] = "index.php?controller=home&action=aPropos";
         $data->menu['First'] = "index.php?controller=photo&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom;
         $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom;
-        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=2";
+        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=1";
         $data->menu['Zoom +'] = "index.php?controller=photo&action=zoomPlus&imageId=" . $imageId . "&size=" . $size . "&zoom=1.25";
         $data->menu['Zoom -'] = "index.php?controller=photo&action=zoomMoins&imageId=" . $imageId . "&size=" . $size . "&zoom=0.8";
         require_once("view/mainView.php");

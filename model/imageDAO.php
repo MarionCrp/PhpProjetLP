@@ -116,12 +116,12 @@
 				trigger_error("Erreur dans ImageDAO.getImageList: nombre d'images nul");
 			}
 			$id = $img->getId();
-			if(($id+$nb) < $this->size()){
-				$max = $id + $nb;
+			if(($id+$nb-1) <= $this->size()){
+				$max = $id + $nb - 1;
 			} else {
 				$max = $this->size();
 			}
-			while ($id < $max) {
+			while ($id <= $max ) {
 				$res[] = $this->getImage($id);
 				$id++;
 			}
