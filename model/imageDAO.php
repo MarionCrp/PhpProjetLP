@@ -128,6 +128,16 @@
 			return $res;
 		}
 
+		# Retourne la liste de toute les différentes catégorie enregistrées dans la base
+		function getCategoryList(){
+			$rqt = $this->dbh->query('SELECT DISTINCT category FROM image');
+			$list = $rqt->fetchAll();
+			//var_dump($rqt);
+			//var_dump($list);
+			//var_dump($list[1]["category"]);
+			return $list;
+		}
+
 		# Retourne la catégorie pour un imgId donné
 		function getCategory($imgId){
 			//return $this->dbh->query('SELECT category FROM image WHERE id='.$imgId,PDO::FETCH_ASSOC);

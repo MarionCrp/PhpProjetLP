@@ -13,9 +13,10 @@
         <form method="post" action="index.php?controller=photo&action=validateChangeCategory&imageId=<?= $data->imageId?>">
             <p>Catégorie actuelle: <?= $data->actualCategory ?></p>
             <select name="category">
-                <option value="Tourist">Tourist</option>
-                <option>Beltaine</option>
-                <option>Attractions</option>
+                <?php
+                  foreach ($data->listCat as $key => $value) {
+                    echo "<option value=".$value["category"].">".$value["category"]."</option>";
+                }?>
             </select>
             <input type="submit" name="envoyer" value="Sauvegarder"/>
         </form>

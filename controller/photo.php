@@ -70,6 +70,8 @@ class photo
             $data->content = "view/changeCategoryView.php";
             $data->actualCategory = $this->imgDAO->getCategory($imageId);
             $data->imageId = $imageId;
+            $data->listCat = $this->imgDAO->getCategoryList();
+            var_dump($data->listCat[1]["category"]);
         }
         elseif ($_GET['action'] == 'changeCommentary') {
             $data->content = "view/changeCommentaryView.php";
