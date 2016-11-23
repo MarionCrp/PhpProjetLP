@@ -69,16 +69,17 @@ class photo
         if ($_GET['action'] == 'changeCategory') {
             $data->content = "view/changeCategoryView.php";
         } else {
-          $newImage = $this->imgDAO->getImage($imageId);
-          $data->imageURL = $newImage->getURL();
-          $data->size = $size;
-          $data->imageId = $imageId;
+            $newImage = $this->imgDAO->getImage($imageId);
+            $data->imageURL = $newImage->getURL();
+            $data->size = $size;
+            $data->imageId = $imageId;
 
-          $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$imageId."&size=".$size;
-          $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$imageId."&size=".$size;
+            $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
+            $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
 
-          $data->imageCategory = $newImage->getCategory();
-          $data->imageCommentary = $newImage->getCommentary();
+            $data->imageCategory = $newImage->getCategory();
+            $data->imageCommentary = $newImage->getCommentary();
+            $data->content = "view/photoView.php";
         }
     }
 
@@ -105,8 +106,9 @@ class photo
         $this->setMenuView();
     }
 
-    public function prevPicture(){
-        global $data,$imageId,$size,$zoom;
+    public function prevPicture()
+    {
+        global $data, $imageId, $size, $zoom;
         $this->getParams();
         $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
