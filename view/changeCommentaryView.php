@@ -6,7 +6,6 @@
  * Time: 14:55
  */
 ?>
-<html>
 <div>
     <h1>Changement du commentaire de l'image</h1>
     <form method="post" action="index.php?controller=photo&action=validateChangeCommentary&imageId=<?= $data->imageId?>">
@@ -17,4 +16,3 @@
         <input type="submit" name="envoyer" value="Sauvegarder"/>
     </form>
 </div>
-</html>
