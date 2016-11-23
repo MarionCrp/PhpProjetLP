@@ -69,17 +69,16 @@ class photo
         if ($_GET['action'] == 'changeCategory') {
             $data->content = "view/changeCategoryView.php";
         } else {
-            $newImage = $this->imgDAO->getImage($imageId);
-            $data->imageURL = $newImage->getURL();
-            $data->size = $size;
-            $data->imageId = $imageId;
-            $prevImageId = $imageId - 1;
-            $nextImageId = $imageId + 1;
-            $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $prevImageId . "&size=" . $size;
-            $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $nextImageId . "&size=" . $size;
-            $data->imageCategory = $newImage->getCategory();
-            $data->imageCommentary = $newImage->getCommentary();
-            $data->urlChangeCategory = "index.php?controller=photoMatrix&action=changeCategory";
+          $newImage = $this->imgDAO->getImage($imageId);
+          $data->imageURL = $newImage->getURL();
+          $data->size = $size;
+          $data->imageId = $imageId;
+
+          $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=".$imageId."&size=".$size;
+          $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=".$imageId."&size=".$size;
+
+          $data->imageCategory = $newImage->getCategory();
+          $data->imageCommentary = $newImage->getCommentary();
         }
     }
 
@@ -101,26 +100,18 @@ class photo
         $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
         $nextImage = $this->imgDAO->getNextImage($currentImage);
-        $nextImageId = $nextImage->getId();
-        $max = $this->imgDAO->size();
-        if ($nextImageId > $max) {
-            $nextImageId = $max;
-        }
+        $imageId = $nextImage->getId();
         $this->setContentView();
         $this->setMenuView();
     }
 
-    public function prevPicture()
-    {
-        global $data, $imageId, $size, $zoom;
-        //$data = new data();
+    public function prevPicture(){
+        global $data,$imageId,$size,$zoom;
+        $this->getParams();
         $this->getParams();
         $currentImage = $this->imgDAO->getImage($imageId);
         $prevImage = $this->imgDAO->getPrevImage($currentImage);
-        $prevImageId = $prevImage->getId();
-        if ($prevImageId <= 0) {
-            $prevImageId = 1;
-        }
+        $imageId = $prevImage->getId();
         $this->setContentView();
         $this->setMenuView();
     }

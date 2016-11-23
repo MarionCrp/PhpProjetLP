@@ -14,7 +14,7 @@ print "<a href=\"" . $data->nextURL . "\">Next</a>";
 print "</p>\n";
 if (is_array($data->imgLst) || is_object($data->imgLst)) {
     foreach ($data->imgLst as $i) {
-        print "<img src=\"".$i[0]."\"width\"".$data->size."\"height=\"" . $data->size . "\">\n";
+        print "<img src=\"".$i[0]."\"width=\"".$data->size."\"height=\"" . $data->size . "\">\n";
     }
 };
 ?>
