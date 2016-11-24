@@ -123,13 +123,18 @@ class ImageDAO
     function jumpToImage(image $img, $nb)
     {
         $id = $img->getId();
-        if (($id + $nb) < 1 || ($id + $nb) > $this->size()) {
-            return $img;
-        } else {
-            $max_id = $id + $nb;
-            $newImg = $this->getImage($max_id);
-            return $newImg;
-        }
+				if($nb < 0) {
+					$req = $this->dbh->query('SELECT min(id) FROM (SELECT * FROM `image` WHERE `id` < '.$id.' ORDER BY id DESC LIMIT '.abs($nb).') as test');
+				} else {
+					$req = $this->dbh->query('SELECT max(id) FROM (SELECT * FROM `image` WHERE `id` > '.$id.' ORDER BY id ASC LIMIT '.$nb.') as test') ;
+				}
+				$imgId = $req->fetch()[0
+
+				if($imgId == null){
+					return $img;
+				} else {
+					return $this->getImage($imgId);
+				}
     }
 
     # Retourne la liste des images consécutives à partir d'une image
@@ -205,7 +210,7 @@ class ImageDAO
     function getPopularity($imgId)
     {
         $rqt = $this->dbh->query('SELECT popularity FROM image WHERE id=' . $imgId);
-        $popularity = $rqt->fetchColumn();
+				$popularity = $rqt->fetchColumn();
         return $popularity;
     }
 
