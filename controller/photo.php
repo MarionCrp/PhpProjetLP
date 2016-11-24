@@ -173,6 +173,7 @@ class photo
         $this->setMenuView();
     }
 
+
     /* partie pour changer catégorie */
     public function changeCategory()
     {
@@ -186,7 +187,8 @@ class photo
         global $data, $imageId, $size, $zoom;
         if(isset($_POST["category"])){
             $this->getParams();
-            $this->imgDAO->updateImageCategory($imageId, $_POST["category"]);
+            $cat = $this->imgDAO->getCategoryList()[$_POST["category"]];
+            $this->imgDAO->updateImageCategory($imageId, $cat);
             $this->setContentView();
             $this->setMenuView();
         }

@@ -14,7 +14,7 @@
           <select name="category">
               <?php
                 foreach ($data->listCat as $key => $value) {
-                  echo "<option value=".$value["category"].">".$value["category"]."</option>";
+                  echo "<option value=".$key.">".$value."</option>";
               }?>
           </select>
           <input type="submit" name="envoyer" value="Sauvegarder"/>

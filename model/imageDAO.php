@@ -132,10 +132,11 @@
 		function getCategoryList(){
 			$rqt = $this->dbh->query('SELECT DISTINCT category FROM image');
 			$list = $rqt->fetchAll();
-			//var_dump($rqt);
-			//var_dump($list);
-			//var_dump($list[1]["category"]);
-			return $list;
+			$category_list = [];
+			foreach($list as $key => $value){
+				array_push($category_list, $value[0]);
+			}
+			return $category_list;
 		}
 
 		# Retourne la catégorie pour un imgId donné
