@@ -5,7 +5,8 @@
  * Date: 24/11/2016
  * Time: 20:00
  */
-
+print "<a href=".$data->urlBack."><- Retour</a>";
+print "</p>\n";
 if ($data->state == "top") {
     foreach ($data->urlListTop as $value) {
         print "<img src=\"" . $value . "\"width=480 height=480\">\n";
