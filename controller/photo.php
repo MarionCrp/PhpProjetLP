@@ -67,38 +67,50 @@ class photo
         global $data, $imageId, $size, $zoom, $img;
         $data = new data();
 
-        if(isset($_GET['action'])){
-          switch ($_GET['action']) {
-            case 'changeCategory':
-              $data->content = "view/changeCategoryView.php";
-              $data->actualCategory = $this->imgDAO->getCategory($imageId);
-              $data->imageId = $imageId;
-              $data->listCat = $this->imgDAO->getCategoryList();
-              break;
+        if (isset($_GET['action'])) {
+            switch ($_GET['action']) {
+                case 'changeCategory':
+                    $data->content = "view/changeCategoryView.php";
+                    $data->actualCategory = $this->imgDAO->getCategory($imageId);
+                    $data->imageId = $imageId;
+                    $data->listCat = $this->imgDAO->getCategoryList();
+                    break;
 
-            case 'changeCommentary':
-              $data->content = "view/changeCommentaryView.php";
-              $data->actualComment = $this->imgDAO->getCommentary($imageId);
-              $data->imageId = $imageId;
-              break;
+                case 'changeCommentary':
+                    $data->content = "view/changeCommentaryView.php";
+                    $data->actualComment = $this->imgDAO->getCommentary($imageId);
+                    $data->imageId = $imageId;
+                    break;
 
-            default:
-              $newImage = $this->imgDAO->getImage($imageId);
-              $data->imageURL = $newImage->getURL();
-              $data->size = $size;
-              $data->imageId = $imageId;
+                case 'top10':
+                    break;
 
-              $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
-              $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
+                case 'bot10':
+                    break;
 
-              $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory&imageId=" . $imageId ;
-              $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary&imageId=" . $imageId;
+                default:
+                    $newImage = $this->imgDAO->getImage($imageId);
+                    $data->imageURL = $newImage->getURL();
+                    $data->size = $size;
+                    $data->imageId = $imageId;
+                    $data->popularity = $this->imgDAO->getPopularity($imageId);
 
-              $data->imageCategory = $newImage->getCategory();
-              $data->imageCommentary = $newImage->getCommentary();
-              $data->content = "view/photoView.php";
-              break;
-           }
+                    $data->urlLike = "index.php?controller=photo&action=onLikeClick&imageId=" . $imageId;
+                    $data->urlDislike = "index.php?controller=photo&action=onDisLikeClick&imageId=" . $imageId;
+                    $data->urlTop10Pop = "index.php?controller=photo&action=top10Popularity&imageId=" . $imageId;
+                    $data->urlBot10Pop = "index.php?controller=photo&action=bot10Popularity&imageId=" . $imageId;
+
+                    $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
+                    $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
+
+                    $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory&imageId=" . $imageId;
+                    $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary&imageId=" . $imageId;
+
+                    $data->imageCategory = $newImage->getCategory();
+                    $data->imageCommentary = $newImage->getCommentary();
+                    $data->content = "view/photoView.php";
+                    break;
+            }
         }
     }
 
@@ -136,11 +148,12 @@ class photo
         $this->setMenuView();
     }
 
-    public function show() {
-      global $data, $imageId, $size, $zoom;
-      $this->getParams();
-      $this->setContentView();
-      $this->setMenuView();
+    public function show()
+    {
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+        $this->setContentView();
+        $this->setMenuView();
     }
 
     public function random()
@@ -183,9 +196,10 @@ class photo
         $this->setMenuView();
     }
 
-    public function validateChangeCategory(){
+    public function validateChangeCategory()
+    {
         global $data, $imageId, $size, $zoom;
-        if(isset($_POST["category"])){
+        if (isset($_POST["category"])) {
             $this->getParams();
             $cat = $this->imgDAO->getCategoryList()[$_POST["category"]];
             $this->imgDAO->updateImageCategory($imageId, $cat);
@@ -195,21 +209,56 @@ class photo
     }
 
     /* partie pour changer commentaire */
-    public function changeCommentary(){
-        global $data,$imageId,$size,$zoom;
+    public function changeCommentary()
+    {
+        global $data, $imageId, $size, $zoom;
         $this->getParams();
 
         $this->setContentView();
         $this->setMenuView();
     }
 
-    public function validateChangeCommentary(){
+    public function validateChangeCommentary()
+    {
         global $data, $imageId, $size, $zoom;
-        if(isset($_POST["commentary"])){
+        if (isset($_POST["commentary"])) {
             $this->getParams();
-            $this->imgDAO->updateImageCommentary($imageId,$_POST["commentary"]);
+            $this->imgDAO->updateImageCommentary($imageId, $_POST["commentary"]);
             $this->setContentView();
             $this->setMenuView();
         }
+    }
+
+    public function onLikeClick()
+    {
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+        $this->imgDAO->updateImagePopularity($imageId, "like");
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function onDisLikeClick()
+    {
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+        $this->imgDAO->updateImagePopularity($imageId, "dislike");
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function top10Popularity(){
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+        $this->setContentView();
+        $this->setMenuView();
+    }
+
+    public function bot10Popularity(){
+        global $data, $imageId, $size, $zoom;
+        $this->getParams();
+
+        $this->setContentView();
+        $this->setMenuView();
     }
 }
