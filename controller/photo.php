@@ -82,10 +82,30 @@ class photo
                     $data->imageId = $imageId;
                     break;
 
-                case 'top10':
+                case 'top10Popularity':
+                    $listTop = $this->imgDAO->getTop10pop();
+                    $urlList= [];
+                    foreach ($listTop as $id){
+                        $image = $this->imgDAO->getImage($id);
+                        array_push($urlList,$image->getURL());
+                    }
+                    $data->urlListTop = $urlList;
+                    $data->content = "view/popularityTopBotView.php";
+                    $data->state = "top";
+                    $data->urlBack = "index.php?controller=photo&action=show&imageId=" . $imageId . "&size=" . $size;
                     break;
 
-                case 'bot10':
+                case 'bot10Popularity':
+                    $listBot = $this->imgDAO->getBot10Pop();
+                    $urlList= [];
+                    foreach ($listBot as $id){
+                        $image = $this->imgDAO->getImage($id);
+                        array_push($urlList,$image->getURL());
+                    }
+                    $data->urlListBot = $urlList;
+                    $data->content = "view/popularityTopBotView.php";
+                    $data->state = "bot";
+                    $data->urlBack = "index.php?controller=photo&action=show&imageId=" . $imageId . "&size=" . $size;
                     break;
 
                 default:
