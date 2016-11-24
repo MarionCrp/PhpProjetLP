@@ -128,7 +128,7 @@ class ImageDAO
 				} else {
 					$req = $this->dbh->query('SELECT max(id) FROM (SELECT * FROM `image` WHERE `id` > '.$id.' ORDER BY id ASC LIMIT '.$nb.') as test') ;
 				}
-				$imgId = $req->fetch()[0
+				$imgId = $req->fetch()[0];
 
 				if($imgId == null){
 					return $img;
