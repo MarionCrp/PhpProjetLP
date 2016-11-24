@@ -116,12 +116,12 @@
 				trigger_error("Erreur dans ImageDAO.getImageList: nombre d'images nul");
 			}
 			$id = $img->getId();
-			if(($id+$nb) < $this->size()){
-				$max = $id + $nb;
+			if(($id+$nb-1) <= $this->size()){
+				$max = $id + $nb - 1;
 			} else {
 				$max = $this->size();
 			}
-			while ($id < $max) {
+			while ($id <= $max ) {
 				$res[] = $this->getImage($id);
 				$id++;
 			}
@@ -132,10 +132,11 @@
 		function getCategoryList(){
 			$rqt = $this->dbh->query('SELECT DISTINCT category FROM image');
 			$list = $rqt->fetchAll();
-			//var_dump($rqt);
-			//var_dump($list);
-			//var_dump($list[1]["category"]);
-			return $list;
+			$category_list = [];
+			foreach($list as $key => $value){
+				array_push($category_list, $value[0]);
+			}
+			return $category_list;
 		}
 
 		# Retourne la catégorie pour un imgId donné

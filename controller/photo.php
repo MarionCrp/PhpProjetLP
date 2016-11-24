@@ -55,9 +55,10 @@ class photo
         $data->menu['A propos'] = "index.php?controller=home&action=aPropos";
         $data->menu['First'] = "index.php?controller=photo&action=first&imageId=1&size=" . $size . "&zoom=" . $zoom;
         $data->menu['Random'] = "index.php?controller=photo&action=random&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom;
-        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=2";
+        $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=1";
         $data->menu['Zoom +'] = "index.php?controller=photo&action=zoomPlus&imageId=" . $imageId . "&size=" . $size . "&zoom=1.25";
         $data->menu['Zoom -'] = "index.php?controller=photo&action=zoomMoins&imageId=" . $imageId . "&size=" . $size . "&zoom=0.8";
+        $data->menu['Add Picture'] = "index.php?controller=photo&action=addPicture";
         require_once("view/mainView.php");
     }
 
@@ -66,32 +67,38 @@ class photo
         global $data, $imageId, $size, $zoom, $img;
         $data = new data();
 
-        if ($_GET['action'] == 'changeCategory') {
-            $data->content = "view/changeCategoryView.php";
-            $data->actualCategory = $this->imgDAO->getCategory($imageId);
-            $data->imageId = $imageId;
-            $data->listCat = $this->imgDAO->getCategoryList();
-            var_dump($data->listCat[1]["category"]);
-        }
-        elseif ($_GET['action'] == 'changeCommentary') {
-            $data->content = "view/changeCommentaryView.php";
-            $data->actualComment = $this->imgDAO->getCommentary($imageId);
-            $data->imageId = $imageId;
-        }else {
-            $newImage = $this->imgDAO->getImage($imageId);
-            $data->imageURL = $newImage->getURL();
-            $data->size = $size;
-            $data->imageId = $imageId;
+        if(isset($_GET['action'])){
+          switch ($_GET['action']) {
+            case 'changeCategory':
+              $data->content = "view/changeCategoryView.php";
+              $data->actualCategory = $this->imgDAO->getCategory($imageId);
+              $data->imageId = $imageId;
+              $data->listCat = $this->imgDAO->getCategoryList();
+              break;
 
-            $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
-            $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
+            case 'changeCommentary':
+              $data->content = "view/changeCommentaryView.php";
+              $data->actualComment = $this->imgDAO->getCommentary($imageId);
+              $data->imageId = $imageId;
+              break;
 
-            $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory&imageId=" . $imageId ;
-            $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary&imageId=" . $imageId;
+            default:
+              $newImage = $this->imgDAO->getImage($imageId);
+              $data->imageURL = $newImage->getURL();
+              $data->size = $size;
+              $data->imageId = $imageId;
 
-            $data->imageCategory = $newImage->getCategory();
-            $data->imageCommentary = $newImage->getCommentary();
-            $data->content = "view/photoView.php";
+              $data->prevURL = "index.php?controller=photo&action=prevPicture&imageId=" . $imageId . "&size=" . $size;
+              $data->nextURL = "index.php?controller=photo&action=nextPicture&imageId=" . $imageId . "&size=" . $size;
+
+              $data->URLChangeCategory = "index.php?controller=photo&action=changeCategory&imageId=" . $imageId ;
+              $data->URLChangeCommentary = "index.php?controller=photo&action=changeCommentary&imageId=" . $imageId;
+
+              $data->imageCategory = $newImage->getCategory();
+              $data->imageCommentary = $newImage->getCommentary();
+              $data->content = "view/photoView.php";
+              break;
+           }
         }
     }
 
@@ -166,12 +173,12 @@ class photo
         $this->setMenuView();
     }
 
+
     /* partie pour changer catégorie */
     public function changeCategory()
     {
         global $data, $imageId, $size, $zoom;
         $this->getParams();
-
         $this->setContentView();
         $this->setMenuView();
     }
@@ -180,7 +187,8 @@ class photo
         global $data, $imageId, $size, $zoom;
         if(isset($_POST["category"])){
             $this->getParams();
-            $this->imgDAO->updateImageCategory($imageId, $_POST["category"]);
+            $cat = $this->imgDAO->getCategoryList()[$_POST["category"]];
+            $this->imgDAO->updateImageCategory($imageId, $cat);
             $this->setContentView();
             $this->setMenuView();
         }
