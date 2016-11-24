@@ -92,6 +92,7 @@ class photo
                     $data->urlListTop = $urlList;
                     $data->content = "view/popularityTopBotView.php";
                     $data->state = "top";
+                    $data->urlBack = "index.php?controller=photo&action=show&imageId=" . $imageId . "&size=" . $size;
                     break;
 
                 case 'bot10Popularity':
@@ -104,6 +105,7 @@ class photo
                     $data->urlListBot = $urlList;
                     $data->content = "view/popularityTopBotView.php";
                     $data->state = "bot";
+                    $data->urlBack = "index.php?controller=photo&action=show&imageId=" . $imageId . "&size=" . $size;
                     break;
 
                 default:
