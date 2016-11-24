@@ -60,9 +60,11 @@
                debug_print_backtrace();
                die('error');
             }
+
             foreach ($this->dbh->query('SELECT * FROM image WHERE id='.$imgId,PDO::FETCH_ASSOC) as $row){
                 return new Image(self::urlPath.$row['path'],$row['id'],$row['category'],$row['commentary']);
             }
+
         }
 
 		# Retourne une image au hazard
@@ -80,19 +82,33 @@
 		# Retourne l'image suivante d'une image
 		function getNextImage(image $img) {
 			$id = $img->getId();
-			if ($id < $this->size()) {
-				$img = $this->getImage($id+1);
+			$req = $this->dbh->prepare('SELECT * FROM image WHERE id > :id ORDER BY id LIMIT 1');
+			$req->execute(array(
+				'id' => $id));
+			$donnees = $req->fetch(PDO::FETCH_ASSOC);
+			if($donnees == false){
+				return $img;
+			} else {
+				return new Image(
+					self::urlPath.$donnees['path'],$donnees['id'],$donnees['category'],$donnees['commentary']
+				);
 			}
-			return $img;
 		}
 
 		# Retourne l'image précédente d'une image
 		function getPrevImage(image $img) {
 			$id = $img->getId();
-            if($id > 1){
-                $img = $this->getImage($id-1);
-            }
-            return $img;
+			$req = $this->dbh->prepare('SELECT * FROM image WHERE id < :id ORDER BY id DESC LIMIT 1');
+			$req->execute(array(
+				'id' => $id));
+			$donnees = $req->fetch(PDO::FETCH_ASSOC);
+			if($donnees == false){
+				return $img;
+			} else {
+				return new Image(
+					self::urlPath.$donnees['path'],$donnees['id'],$donnees['category'],$donnees['commentary']
+				);
+			}
 		}
 
 		# saute en avant ou en arrière de $nb images
