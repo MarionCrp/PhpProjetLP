@@ -58,7 +58,6 @@ class photo
         $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=1";
         $data->menu['Zoom +'] = "index.php?controller=photo&action=zoomPlus&imageId=" . $imageId . "&size=" . $size . "&zoom=1.25";
         $data->menu['Zoom -'] = "index.php?controller=photo&action=zoomMoins&imageId=" . $imageId . "&size=" . $size . "&zoom=0.8";
-        $data->menu['Add Picture'] = "index.php?controller=photo&action=addPicture";
         require_once("view/mainView.php");
     }
 
@@ -66,6 +65,7 @@ class photo
     {
         global $data, $imageId, $size, $zoom, $img;
         $data = new data();
+        $data->listCat = $this->imgDAO->getCategoryList();
 
         if (isset($_GET['action'])) {
             switch ($_GET['action']) {

@@ -7,8 +7,21 @@
  */
 
 require_once ("view/mainView.php");
+?>
 
-
+  <div id="filter_form">
+    <form method="post" action="index.php?controller=photo&action=searchByCategory">
+        <select name="category">
+            <?php
+            var_dump($data->listCat);
+              foreach ($data->listCat as $key => $value) {
+                echo "<option value=".$key.">".$value."</option>";
+            }?>
+        </select>
+        <input type="submit" name="envoyer" value="Chercher"/>
+    </form>
+  </div>
+<?php
 print "<p>\n";
 print "<a href=\"".$data->prevURL."\">Prev</a> ";
 print "<a href=\"".$data->nextURL."\">Next</a>";

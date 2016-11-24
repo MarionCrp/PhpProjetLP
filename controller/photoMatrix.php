@@ -68,6 +68,7 @@ class photoMatrix
     {
         global $data, $imageId, $size, $img, $nbImg, $imgLst, $imgMatrixURL;
         $data = new data();
+        $data->listCat = $this->imgDAO->getCategoryList();
         $newImage = $this->imgDAO->getImage(1); //récupère l'image (la première du groupe)
 
         // Réalise l'affichage de l'image
@@ -165,5 +166,10 @@ class photoMatrix
           #  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
           $imgMatrixURL[] = array($i->getURL(), "index.php?controller=photo&action=show&imageId=" . $iId . "&size=600");
       }
+    }
+
+    public function searchByCategory(){
+      global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
+      var_dump("toto");
     }
 }
