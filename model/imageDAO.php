@@ -186,6 +186,35 @@
 			$rqt->execute();
 			/*echo("cat update");*/
 		}
+
+		# Retounre le taux de popularité pour un imgId donné
+		function getPopularity($imgId){
+			$rqt = $this->dbh->query('SELECT popularity FROM image WHERE id='.$imgId);
+			$popularity = $rqt->fetchColumn();
+			return $popularity;
+		}
+
+		# Change la popularité d'une image
+		function updateImagePopularity($imgId, $choix){
+			$pop = $this->getPopularity($imgId);
+			if($choix == "like"){
+				$newPop = (int) $pop+1;
+			}elseif ($choix == "dislike"){
+				$newPop = (int) $pop-1;
+			}
+			$rqt = $this->dbh->prepare('UPDATE image SET popularity = :popularity WHERE id = :id');
+			$rqt->bindValue(':id',$imgId);
+			$rqt->bindValue(':popularity',$newPop);
+			$rqt->execute();
+		}
+
+		function getTop10pop(){
+
+		}
+
+		function getBot10Pop(){
+
+		}
 	}
 
 	# Test unitaire
