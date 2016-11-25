@@ -170,6 +170,5 @@ class photoMatrix
 
     public function searchByCategory(){
       global $data, $imageId, $size, $zoom,$nbImg,$imgMatrixURL, $img;
-      var_dump("toto");
     }
 }

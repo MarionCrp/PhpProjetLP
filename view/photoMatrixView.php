@@ -13,7 +13,6 @@ require_once("view/mainView.php");
     <form method="post" action="index.php?controller=photo&action=<?= $_GET['action'] ?>">
         <select name="category">
             <?php
-            var_dump($data->listCat);
               foreach ($data->listCat as $key => $value) {
                 echo "<option value=".$key.">".$value."</option>";
             }?>
