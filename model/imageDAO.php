@@ -250,6 +250,18 @@ class ImageDAO
         }
         return $bot;
     }
+
+    function deleteCategory($category_name){
+      $rqt = $this->dbh->query('SELECT id FROM image WHERE category = "'.$category_name.'"');
+      $list = $rqt->fetchAll();
+      foreach($list as $key){
+        $rqt = $this->dbh->prepare('UPDATE image SET category = "" WHERE id = :id');
+        $rqt->bindValue(':id', $key[0]);
+        $rqt->execute();
+      }
+
+
+    }
 }
 
 # Test unitaire

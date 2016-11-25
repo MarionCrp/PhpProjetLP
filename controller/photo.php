@@ -58,6 +58,7 @@ class photo
         $data->menu['More'] = "index.php?controller=photoMatrix&action=more&imageId=" . $imageId . "&size=" . $size . "&zoom=" . $zoom . "&nbImg=1";
         $data->menu['Zoom +'] = "index.php?controller=photo&action=zoomPlus&imageId=" . $imageId . "&size=" . $size . "&zoom=1.25";
         $data->menu['Zoom -'] = "index.php?controller=photo&action=zoomMoins&imageId=" . $imageId . "&size=" . $size . "&zoom=0.8";
+        $data->menu['Suppression catégory'] = "index.php?controller=photo&action=updateCategories";
         require_once("view/mainView.php");
     }
 
@@ -107,6 +108,11 @@ class photo
                     $data->state = "bot";
                     $data->urlBack = "index.php?controller=photo&action=show&imageId=" . $imageId . "&size=" . $size;
                     break;
+
+                case 'updateCategories':
+                  $data->listCat = $this->imgDAO->getCategoryList();
+                  $data->content = "view/updateCategoriesView.php";
+                  break;
 
                 default:
                     $newImage = $this->imgDAO->getImage($imageId);
@@ -219,13 +225,19 @@ class photo
     public function validateChangeCategory()
     {
         global $data, $imageId, $size, $zoom;
-        if (isset($_POST["category"])) {
+        if(isset($_POST['new_category']) && !empty($_POST['new_category'])){
+          $this->getParams();
+          $cat = $_POST['new_category'];
+          $this->imgDAO->updateImageCategory($imageId, $cat);
+        } else {
+          if (isset($_POST["category"])) {
             $this->getParams();
             $cat = $this->imgDAO->getCategoryList()[$_POST["category"]];
             $this->imgDAO->updateImageCategory($imageId, $cat);
-            $this->setContentView();
-            $this->setMenuView();
+          }
         }
+        $this->setContentView();
+        $this->setMenuView();
     }
 
     /* partie pour changer commentaire */
@@ -280,5 +292,21 @@ class photo
 
         $this->setContentView();
         $this->setMenuView();
+    }
+
+    public function updateCategories(){
+      global $data;
+      $this->getParams();
+      $this->setContentView();
+      $this->setMenuView();
+    }
+
+    public function deleteCategory(){
+      global $data;
+      $cat = $this->imgDAO->getCategoryList()[$_POST['category']];
+      $this->imgDAO->deleteCategory($cat);
+      $this->getParams();
+      $this->setContentView();
+      $this->setMenuView();
     }
 }

@@ -18,6 +18,9 @@
                   <?php
               }?>
           </select>
+
+          <p> Ajouter une catégorie custom </p>
+          <input type="text" name="new_category" value=""></input> <br>
           <input type="submit" name="envoyer" value="Sauvegarder"/>
       </form>
   </div>
