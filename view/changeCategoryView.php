@@ -14,7 +14,8 @@
           <select name="category">
               <?php
                 foreach ($data->listCat as $key => $value) {
-                  echo "<option value=".$key.">".$value."</option>";
+                  ?> <option value="<?= $key ?>"<?php if($data->actualCategory == $value) echo "selected" ?>> <?= $value ?> </option>
+                  <?php
               }?>
           </select>
           <input type="submit" name="envoyer" value="Sauvegarder"/>
